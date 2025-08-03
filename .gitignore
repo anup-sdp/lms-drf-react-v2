@@ -1,0 +1,6 @@
+source.txt
+z venv setup.txt
+node_modules/
+venv311/
+__pycache__
+db.sqlite3
