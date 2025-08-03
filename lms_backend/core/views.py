@@ -7,6 +7,7 @@ from .serializers import (
     CategorySerializer, CourseSerializer, LessonSerializer, MaterialSerializer,
     EnrollmentSerializer, QuestionAnswerSerializer
 )
+from django.db.models import Count
 from drf_yasg.utils import swagger_auto_schema
 
 # Admin statistics
@@ -32,7 +33,8 @@ def admin_stats(request):
 @permission_classes([IsAuthenticated])
 def category_list_create(request):
     if request.method == 'GET':
-        categories = Category.objects.all()
+        #categories = Category.objects.all()
+        categories = Category.objects.annotate(courses_count=Count('course'))
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
@@ -74,10 +76,7 @@ def category_list_create(request):
         category.delete()
         return Response({"detail": "Category deleted."}, status=204)
 
-# Courses: list/create
-@swagger_auto_schema(method='post', request_body=CourseSerializer)
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+
 
 # Instructors helper: list all instructor users for frontend selection
 @api_view(['GET'])
@@ -89,6 +88,11 @@ def get_all_instructors(request):
     instructors = User.objects.filter(role='teacher').values('id', 'username', 'email')
     return Response(list(instructors))
 
+
+# Courses: list/create
+@swagger_auto_schema(method='post', request_body=CourseSerializer)
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def course_list_create(request):
     if request.method == 'GET':
         if request.user.role == 'admin':
@@ -104,8 +108,8 @@ def course_list_create(request):
         return Response(serializer.data)
 
     if request.method == 'POST':
-        if request.user.role != 'teacher':
-            return Response({'detail': 'Only teachers can create courses.'}, status=403)
+        if request.user.role not in ['admin', 'teacher']:
+            return Response({'detail': 'Only admins or teachers can create courses.'}, status=403)
         serializer = CourseSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(instructor_id=request.user)

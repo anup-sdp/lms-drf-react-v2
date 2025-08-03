@@ -6,6 +6,8 @@ import RegisterPage from "./RegisterPage";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import axios from "axios";
+import CategoriesPage from './CategoriesPage';
+import CoursesPage from './CoursesPage';
 
 function DashboardPage() {
   const { logout, token } = useAuth();
@@ -117,7 +119,33 @@ function DashboardPage() {
               setShowProfile(false);
             },
             active: currentPage === "register",
-          },
+         },
+         {
+           label: "Categories",
+           onClick: () => {
+             setCurrentPage("categories");
+             setShowProfile(false);
+           },
+           active: currentPage === "categories",
+           icon: (
+             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+             </svg>
+           ),
+         },
+         {
+           label: "Courses",
+           onClick: () => {
+             setCurrentPage("courses");
+             setShowProfile(false);
+           },
+           active: currentPage === "courses",
+           icon: (
+             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6l-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2h6l2-2h6a2 2 0 002-2V8a2 2 0 00-2-2h-6z" />
+             </svg>
+           ),
+         },
         ]
       : []),
   ];
@@ -130,6 +158,10 @@ function DashboardPage() {
         return <UsersPage />;
       case "register":
         return <RegisterPage />;
+      case 'categories':
+        return <CategoriesPage />;
+      case 'courses':
+        return <CoursesPage />;	
       case "dashboard":
       default:
         return (
