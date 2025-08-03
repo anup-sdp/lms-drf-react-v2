@@ -94,6 +94,10 @@ export default function CoursesPage() {
     }
   };
 
+  useEffect(() => {
+    console.log("instructors state updated:", instructors);
+  }, [instructors]);
+
   const fetchInstructors = async () => {
     try {
       const res = await fetch('http://127.0.0.1:8000/api/instructors/', {
@@ -102,6 +106,10 @@ export default function CoursesPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.detail || 'Failed to load instructors');
       setInstructors(Array.isArray(data) ? data : []);
+	  console.log("fetchInstructors data = ");
+	  console.log(data);	  
+	  console.log("instructors = ");
+	  console.log(instructors);
     } catch (err) {
       console.error(err);
       showToast(err.message, 'error');
@@ -156,7 +164,7 @@ export default function CoursesPage() {
         if (!res.ok) throw new Error(data?.detail || 'Failed to update course');
         showToast('Course updated');
       } else {
-        const res = await fetch('http://127.0.0.1:8000/api/courses/', {
+        const res = await fetch('http://127.0.0.1:8000/api/courses/', { // -----------------------------------
           method: 'POST',
           headers: { 'Content-Type': 'application/json', ...authHeaders },
           body: JSON.stringify(form),
@@ -238,7 +246,8 @@ export default function CoursesPage() {
                   Category: <strong>{getCategoryName(course.category_id)}</strong>
                 </div>
                 <div>
-                  Instructor: <strong>{getInstructorName(course.instructor_id)}</strong>
+                  {/* Instructor: <strong>{getInstructorName(course.instructor_id)}</strong> */}
+				  Instructor: <strong>{course.instructor_username}</strong>
                 </div>
                 <div>Price: <strong>{course.price ?? 0}</strong></div>
                 <div>Duration: <strong>{course.duration ?? 0}</strong></div>
@@ -307,7 +316,7 @@ export default function CoursesPage() {
                 <select
                   className="mt-1 w-full border rounded px-3 py-2"
                   value={form.instructor_id}
-                  onChange={(e) => setForm((f) => ({ ...f, instructor_id: Number(e.target.value) }))}
+                  onChange={(e) => setForm((f) => ({ ...f, instructor_id: Number(e.target.value) }))} // -------------------------
                   required
                 >
                   <option value="">Select instructor</option>

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 USER_ROLES = (
-    ('admin', 'Admin'),
+    ('admin', 'Admin'), # in db 'admin' is saved for role
     ('teacher', 'Teacher'),
     ('student', 'Student'),
 )

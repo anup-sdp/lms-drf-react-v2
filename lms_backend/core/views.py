@@ -112,9 +112,11 @@ def course_list_create(request):
             return Response({'detail': 'Only admins or teachers can create courses.'}, status=403)
         serializer = CourseSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(instructor_id=request.user)
+            #serializer.save(instructor_id=request.user)
+            serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
 
 # Course detail: view/update/delete (owner or admin)
 @swagger_auto_schema(method='put', request_body=CourseSerializer)

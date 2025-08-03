@@ -9,14 +9,16 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CourseSerializer(serializers.ModelSerializer):
+    instructor_username = serializers.CharField(source='instructor_id.username', read_only=True)
     class Meta:
         model = Course
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['id','title','description','price','duration','category_id', 'instructor_id',  'instructor_username', 'is_active']
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = '__all__'        
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
