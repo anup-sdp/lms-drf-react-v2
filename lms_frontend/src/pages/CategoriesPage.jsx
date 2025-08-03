@@ -178,7 +178,8 @@ export default function CategoriesPage() {
               </p>
               <div className="mt-3 text-sm text-slate-500">
                 Courses under this category:{' '}
-                <strong>{typeof cat.courses_count === 'number' ? cat.courses_count : 'N/A'}</strong>
+                {/* <strong>{typeof cat.courses_count === 'number' ? cat.courses_count : 'N/A'}</strong> */}
+				<strong>{cat.courses_count}</strong>
               </div>
               <div className="mt-4 flex gap-2">
                 <button
